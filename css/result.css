@@ -20,3 +20,30 @@ img {
   padding: 5px;
   border-bottom-left-radius: 4px;
 }
+
+.loading .container {
+  filter: blur(2px) grayscale(50%);
+  -webkit-filter: blur(2px);
+}
+
+.loading .loading-toplayer {
+  display: flex;
+}
+
+.loading-toplayer {
+  display: none;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.7);
+  z-index: 100;
+}
+
+.loading-toplayer h3 {
+  flex-grow: 1;
+}

@@ -1,7 +1,7 @@
 "use strict";
 
 var shots = new ShotStorage();
-var lastResult = {};
+var lastComparison = {};
 
 function getCurrentTab() {
   return new Promise(function (resolve, reject) {
@@ -84,27 +84,14 @@ function handleMessage(request, sender, response) {
 
     getCurrentTab().then((tab) => {
       return Screenshooter.capture(tab.id).then((currentImg) => {
-        chrome.runtime.sendMessage({
-          message: "comparingShots"
-        });
+        lastComparison = {
+          a: oldImg,
+          b: currentImg
+        };
 
-        resemble.outputSettings({
-          largeImageThreshold: 0
-        });
-
-        resemble(currentImg).compareTo(oldImg).onComplete((diff) => {
-          lastResult = {
-            misMatchPercentage: diff.misMatchPercentage,
-            isSameDimensions: diff.isSameDimensions,
-            diff: diff.getImageDataUrl(),
-            a: oldImg,
-            b: currentImg
-          };
-
-          chrome.tabs.create({
-            url: chrome.extension.getURL('result.html')
-          }, response);
-        });
+        chrome.tabs.create({
+          url: chrome.extension.getURL('result.html')
+        }, response);
       });
     }).catch((e) => {
       chrome.runtime.sendMessage({
@@ -112,8 +99,8 @@ function handleMessage(request, sender, response) {
         text: e ? e.message : 'Unknown error.'
       });
     });
-  } else if (request.message === 'get_last_result') {
-    response(lastResult);
+  } else if (request.message === 'get_last_comparison') {
+    response(lastComparison);
   }
 
   // this return statement has to be here for responses to work ( http://stackoverflow.com/q/20077487/1143495 )

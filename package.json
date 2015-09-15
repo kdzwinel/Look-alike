@@ -1,6 +1,6 @@
 {
   "name": "Look-alike",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Visual regression testing tool.",
   "main": "Gruntfile.js",
   "repository": {

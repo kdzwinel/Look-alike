@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Look-alike",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Visual regression testing tool.",
   "icons": {
     "128": "ico/logo_128.png"
@@ -9,10 +9,11 @@
   "permissions": [
     "tabs",
     "storage",
+    "unlimitedStorage",
     "<all_urls>"
   ],
   "background": {
-    "scripts": ["js/libs/Screenshooter.js", "js/vendor/underscore.min.js", "js/vendor/reasemble.js", "js/libs/ShotStorage.js", "js/background.js"]
+    "scripts": ["js/libs/Screenshooter.js", "js/vendor/underscore.min.js", "js/libs/ShotStorage.js", "js/background.js"]
   },
   "browser_action": {
     "default_icon": {

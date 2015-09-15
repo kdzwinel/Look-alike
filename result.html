@@ -10,12 +10,11 @@
   <link rel="stylesheet" href="css/skeleton.css">
   <link rel="stylesheet" href="css/result.css">
 </head>
-<body>
+<body class="loading">
 <div class="container">
   <h1>Look-alike</h1>
 
-  <p>Mismatch: <span class="mismatch-value"></span>% &middot; Same dimensions: <span class="same-dimensions"></span>
-  </p>
+  <p>Mismatch: <span class="mismatch-value">-</span>% &middot; Same dimensions: <span class="same-dimensions">-</span></p>
 
   <div class="buttons">
     <button class="button-primary show-diff">Diff</button>
@@ -24,8 +23,13 @@
   </div>
 
   <img src="" class="result-image"/>
+
+</div>
+<div class="loading-toplayer">
+  <h3>Processing ...</h3>
 </div>
 <script src="js/vendor/moment.js"></script>
+<script src="js/vendor/reasemble.js"></script>
 <script src="js/result.js"></script>
 </body>
 </html>
