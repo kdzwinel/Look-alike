@@ -64,11 +64,13 @@
         var progress = Math.round(((scrollTop + request.scrollBy) * 100) / request.size.height);
         progress = progress > 100 ? 100 : progress;
 
-        chrome.extension.sendRequest({
-          msg: "captureFragment",
-          position: request.scrollTo,
-          lastCapture: lastCapture,
-          progress: progress
+        requestAnimationFrame(() => {
+          chrome.extension.sendRequest({
+            msg: "captureFragment",
+            position: request.scrollTo,
+            lastCapture: lastCapture,
+            progress: progress
+          });
         });
         break;
 

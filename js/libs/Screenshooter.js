@@ -153,7 +153,23 @@
       });
     },
 
+    reset: function () {
+      this.tabId = null;
+      this.scrollBy = 0;
+      this.size = {
+        width: 0,
+        height: 0
+      };
+      this.originalParams = {
+        overflow: "",
+        scrollTop: 0
+      };
+      this.resolve = null;
+      this.reject = null;
+    },
+
     capturePage: function (tabId) {
+      this.reset();
       this.tabId = tabId;
 
       chrome.tabs.sendRequest(tabId, {
