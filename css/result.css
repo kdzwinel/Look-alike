@@ -1,0 +1,22 @@
+img {
+  width: 100%;
+  border-top: dotted #CEEEF8 1px;
+  padding-top: 5px;
+}
+
+.mismatch-value {
+  font-weight: bold;
+}
+
+.content {
+  position: relative;
+}
+
+.buttons {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background: white;
+  padding: 5px;
+  border-bottom-left-radius: 4px;
+}

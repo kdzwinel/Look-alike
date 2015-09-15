@@ -1,0 +1,21 @@
+{
+  "name": "Look-alike",
+  "version": "1.0.0",
+  "description": "Visual regression testing tool.",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kdzwinel/Look-alike.git"
+  },
+  "author": "Konrad Dzwinel",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/kdzwinel/Look-alike/issues"
+  },
+  "homepage": "https://github.com/kdzwinel/Look-alike",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-zip": "^0.17.1"
+  }
+}

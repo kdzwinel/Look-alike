@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Look-alike Extension - popup</title>
+
+  <link rel="stylesheet" type="text/css" href="css/raleway.css"/>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+<div class="screens">
+  <div class="container screen screen-main">
+    <div class="row">
+      <button class="button-save">Capture</button>
+    </div>
+    <div class="row">
+      <button class="button-primary button-compare">Compare</button>
+    </div>
+    <div class="row footer">
+      <a href="">Help</a> &middot; <a href="">Share</a>
+    </div>
+  </div>
+
+  <div class="container screen screen-list">
+    <div class="shots">
+    </div>
+  </div>
+
+  <div class="container screen screen-msg">
+    <p class="msg"></p>
+  </div>
+</div>
+<template id="template-shot">
+  <div class="shot">
+    <div class="row shot-preview"><img src="#"/></div>
+    <div class="shot-info">
+      <div class="row shot-url"></div>
+      <div class="row shot-date"></div>
+    </div>
+  </div>
+</template>
+<script src="js/vendor/moment.js"></script>
+<script src="js/popup.js"></script>
+</body>
+</html>
