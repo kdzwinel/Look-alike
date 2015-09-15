@@ -5,7 +5,7 @@
  */
 function ShotStorage() {
   var _shots = [];
-  var _maxLength = 30;
+  var _maxLength = 10;
 
   //load data immediately
   chrome.storage.local.get('shots', data => {
@@ -13,7 +13,7 @@ function ShotStorage() {
   });
 
   var save = _.throttle(() => {
-    //chrome.storage.local.set({shots: _shots});
+    chrome.storage.local.set({shots: _shots});
   }, 500);
 
   var generateId = () => {
