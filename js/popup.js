@@ -6,7 +6,9 @@ var compareBtn = document.querySelector('.button-compare');
 var shareBtn = document.querySelector('.button-share');
 var shotTemplate = document.getElementById('template-shot');
 var shotsList = document.querySelector('.screen-list .shots');
+var socialButtons = document.querySelector('.screen-about .social-buttons');
 var msg = document.querySelector('.screen-msg .msg');
+var socialButtonsTemplate = document.getElementById('social-buttons');
 
 function renderShots(shots) {
   if (!shots.length) {
@@ -55,6 +57,9 @@ function showAbout(e) {
   screensContainer.classList.add('show-about');
   screensContainer.classList.remove('show-msg');
   screensContainer.classList.remove('show-list');
+
+  var buttonsUI = document.importNode(socialButtonsTemplate.content, true);
+  socialButtons.appendChild(buttonsUI);
 
   if(e) {
     e.preventDefault();
