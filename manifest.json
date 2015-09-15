@@ -20,5 +20,6 @@
     },
     "default_title": "Look-alike",
     "default_popup": "popup.html"
-  }
+  },
+  "content_security_policy": "script-src 'self' https://platform.twitter.com; object-src 'self'"
 }

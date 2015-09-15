@@ -3,6 +3,7 @@
 var screensContainer = document.querySelector('.screens');
 var saveBtn = document.querySelector('.button-save');
 var compareBtn = document.querySelector('.button-compare');
+var shareBtn = document.querySelector('.button-share');
 var shotTemplate = document.getElementById('template-shot');
 var shotsList = document.querySelector('.screen-list .shots');
 var msg = document.querySelector('.screen-msg .msg');
@@ -35,6 +36,7 @@ function renderShots(shots) {
 function showList() {
   screensContainer.classList.add('show-list');
   screensContainer.classList.remove('show-msg');
+  screensContainer.classList.remove('show-about');
 
   chrome.runtime.sendMessage({
     message: 'get_all_shots'
@@ -44,8 +46,19 @@ function showList() {
 function showMsg(text) {
   screensContainer.classList.add('show-msg');
   screensContainer.classList.remove('show-list');
+  screensContainer.classList.remove('show-about');
 
   msg.innerText = text;
+}
+
+function showAbout(e) {
+  screensContainer.classList.add('show-about');
+  screensContainer.classList.remove('show-msg');
+  screensContainer.classList.remove('show-list');
+
+  if(e) {
+    e.preventDefault();
+  }
 }
 
 function showDiff(e) {
@@ -85,6 +98,7 @@ saveBtn.addEventListener('click', () => {
 
 compareBtn.addEventListener('click', showList);
 shotsList.addEventListener('click', showDiff);
+shareBtn.addEventListener('click', showAbout);
 
 //by default first element of the popup is getting (unwanted) focus
 setTimeout(() => {

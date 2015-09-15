@@ -20,13 +20,21 @@ button {
   text-align: right;
 }
 
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
 body {
   width: 300px;
   overflow: hidden;
 }
 
 .screens {
-  width: 300%;
+  width: 400%;
   display: flex;
   flex-direction: row;
   transition: transform 300ms;
@@ -38,11 +46,15 @@ body {
 }
 
 .screens.show-list {
-  transform: translate3d(-33.333%, 0, 0);
+  transform: translate3d(-25%, 0, 0);
 }
 
 .screens.show-msg {
-  transform: translate3d(-66.666%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+}
+
+.screens.show-about {
+  transform: translate3d(-75%, 0, 0);
 }
 
 .shots {
@@ -102,4 +114,13 @@ body {
   text-align: center;
   word-wrap: break-word;
   overflow: hidden;
+}
+
+.screen-about {
+
+}
+
+.social-buttons {
+  display: flex;
+  flex-direction: row;
 }
