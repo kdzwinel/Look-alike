@@ -73,7 +73,7 @@ function handleMessage(request, sender, response) {
     }).catch((e) => {
       chrome.runtime.sendMessage({
         message: "error",
-        text: e.message
+        text: e ? e.message : 'Unknown error.'
       });
     });
   } else if (request.message === 'get_all_shots') {
@@ -109,7 +109,7 @@ function handleMessage(request, sender, response) {
     }).catch((e) => {
       chrome.runtime.sendMessage({
         message: "error",
-        text: e.message
+        text: e ? e.message : 'Unknown error.'
       });
     });
   } else if (request.message === 'get_last_result') {

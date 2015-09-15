@@ -53,7 +53,7 @@
           document.querySelector("html").style.overflow = "hidden";
         }
 
-        var scrollTop = document.documentElement.scrollTop;
+        var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 
         // last scrolling
         if (request.size.height <= scrollTop + request.scrollBy) {
