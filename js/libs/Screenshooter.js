@@ -1,4 +1,4 @@
-(function () {
+(function iife() {
   function sendDebuggerCommand(debugee, command, options = {}) {
     return new Promise((resolve, reject) => {
       chrome.debugger.sendCommand(debugee, command, options, (result) => {
@@ -11,9 +11,6 @@
     });
   }
 
-  /**
-   * @description Takes screenshot of the current tab
-   */
   function captureTab(tabId) {
     let resolve,
       reject;
@@ -24,7 +21,6 @@
 
     const debugee = { tabId };
 
-    console.time('whole thing');
     chrome.debugger.attach(debugee, '1.3', async () => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
@@ -36,7 +32,9 @@
         const layout = await sendDebuggerCommand(debugee, 'Page.getLayoutMetrics');
         await sendDebuggerCommand(debugee, 'Emulation.setDeviceMetricsOverride', {
           width: layout.contentSize.width,
-          height: layout.contentSize.height,
+          // Cap the height to not hit the GPU limit.
+          // found in https://cs.chromium.org/chromium/src/third_party/blink/renderer/devtools/front_end/emulation/DeviceModeModel.js?l=654&rcl=eea80c5fd4c24852fa8bd3d0974e7f6cfd2d750e
+          height: Math.min((1 << 14), layout.contentSize.height),// eslint-disable-line
           deviceScaleFactor: 1,
           mobile: false,
         });
@@ -60,7 +58,6 @@
       }
 
       chrome.debugger.detach(debugee);
-      console.timeEnd('whole thing');
     });
 
     return promise;

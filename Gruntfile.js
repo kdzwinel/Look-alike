@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function gruntConfig(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     eslint: {
