@@ -1,26 +1,34 @@
-"use strict";
+/* global moment */
 
-var screensContainer = document.querySelector('.screens');
-var saveBtn = document.querySelector('.button-save');
-var compareBtn = document.querySelector('.button-compare');
-var shareBtn = document.querySelector('.button-share');
-var shotTemplate = document.getElementById('template-shot');
-var shotsList = document.querySelector('.screen-list .shots');
-var socialButtons = document.querySelector('.screen-about .social-buttons');
-var msg = document.querySelector('.screen-msg .msg');
-var socialButtonsTemplate = document.getElementById('social-buttons');
+const screensContainer = document.querySelector('.screens');
+const saveBtn = document.querySelector('.button-save');
+const compareBtn = document.querySelector('.button-compare');
+const shareBtn = document.querySelector('.button-share');
+const shotTemplate = document.getElementById('template-shot');
+const shotsList = document.querySelector('.screen-list .shots');
+const socialButtons = document.querySelector('.screen-about .social-buttons');
+const msg = document.querySelector('.screen-msg .msg');
+const socialButtonsTemplate = document.getElementById('social-buttons');
+
+function showMsg(text) {
+  screensContainer.classList.add('show-msg');
+  screensContainer.classList.remove('show-list');
+  screensContainer.classList.remove('show-about');
+
+  msg.innerText = text;
+}
 
 function renderShots(shots) {
-  if (!shots.length) {
+  if (!shots || !shots.length) {
     showMsg('The list is empty. Create some screenshots first.');
     return;
   }
 
-  var df = document.createDocumentFragment();
+  const df = document.createDocumentFragment();
 
   shots.forEach((shot) => {
-    var shotUI = document.importNode(shotTemplate.content, true);
-    var url = new URL(shot.url);
+    const shotUI = document.importNode(shotTemplate.content, true);
+    const url = new URL(shot.url);
 
     shotUI.querySelector('.shot').dataset.id = shot.id;
     shotUI.querySelector('.shot-preview img').src = shot.thumbnail;
@@ -41,16 +49,8 @@ function showList() {
   screensContainer.classList.remove('show-about');
 
   chrome.runtime.sendMessage({
-    message: 'get_all_shots'
+    message: 'get_all_shots',
   }, renderShots);
-}
-
-function showMsg(text) {
-  screensContainer.classList.add('show-msg');
-  screensContainer.classList.remove('show-list');
-  screensContainer.classList.remove('show-about');
-
-  msg.innerText = text;
 }
 
 function showAbout(e) {
@@ -58,21 +58,21 @@ function showAbout(e) {
   screensContainer.classList.remove('show-msg');
   screensContainer.classList.remove('show-list');
 
-  var buttonsUI = document.importNode(socialButtonsTemplate.content, true);
+  const buttonsUI = document.importNode(socialButtonsTemplate.content, true);
   socialButtons.appendChild(buttonsUI);
 
-  if(e) {
+  if (e) {
     e.preventDefault();
   }
 }
 
 function showDiff(e) {
-  var shot = e.target.closest('.shot');
+  const shot = e.target.closest('.shot');
 
   if (shot) {
     chrome.runtime.sendMessage({
       message: 'diff',
-      id: shot.dataset.id
+      id: shot.dataset.id,
     }, () => {
       window.close();
     });
@@ -81,21 +81,17 @@ function showDiff(e) {
   }
 }
 
-chrome.runtime.onMessage.addListener((request, sender, response) => {
-  if (request.message === 'captureProgress') {
-    showMsg(request.progress + '%');
-  } else if (request.message === 'savingShot') {
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.message === 'savingShot') {
     showMsg('Saving.');
-  } else if (request.message === 'comparingShots') {
-    showMsg('Comparing.');
   } else if (request.message === 'error') {
-    showMsg('Error! ' + request.text);
+    showMsg(`Error! ${request.text}`);
   }
 });
 
 saveBtn.addEventListener('click', () => {
   chrome.runtime.sendMessage({
-    message: 'save_shot'
+    message: 'save_shot',
   }, showList);
 
   showMsg('Capturing...');
@@ -105,10 +101,9 @@ compareBtn.addEventListener('click', showList);
 shotsList.addEventListener('click', showDiff);
 shareBtn.addEventListener('click', showAbout);
 
-//by default first element of the popup is getting (unwanted) focus
+// by default first element of the popup is getting (unwanted) focus
 setTimeout(() => {
   if (document.activeElement) {
     document.activeElement.blur();
   }
 }, 100);
-

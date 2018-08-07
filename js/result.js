@@ -1,15 +1,15 @@
-"use strict";
+/* global resemble */
 
-var aBtn = document.querySelector('.show-a');
-var bBtn = document.querySelector('.show-b');
-var diffBtn = document.querySelector('.show-diff');
-var resultImg = document.querySelector('.result-image');
-var mismatchValue = document.querySelector('.mismatch-value');
-var sameDimensions = document.querySelector('.same-dimensions');
-var diff = null;
-var diffImg = null;
-var aImg = null;
-var bImg = null;
+const aBtn = document.querySelector('.show-a');
+const bBtn = document.querySelector('.show-b');
+const diffBtn = document.querySelector('.show-diff');
+const resultImg = document.querySelector('.result-image');
+const mismatchValue = document.querySelector('.mismatch-value');
+const sameDimensions = document.querySelector('.same-dimensions');
+let diff = null;
+let diffImg = null;
+let aImg = null;
+let bImg = null;
 
 function initBtns() {
   aBtn.addEventListener('click', () => {
@@ -30,13 +30,13 @@ function hideLoader() {
 }
 
 chrome.runtime.sendMessage({
-  message: "get_last_comparison"
+  message: 'get_last_comparison',
 }, (lastResult) => {
   aImg = lastResult.a;
   bImg = lastResult.b;
 
   resemble.outputSettings({
-    largeImageThreshold: 0
+    largeImageThreshold: 0,
   });
 
   resemble(aImg).compareTo(bImg).onComplete((abDiff) => {
@@ -51,4 +51,3 @@ chrome.runtime.sendMessage({
     hideLoader();
   });
 });
-

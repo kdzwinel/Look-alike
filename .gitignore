@@ -1,2 +1,4 @@
 node_modules/
 .idea/
+look-alike-*.zip
+.DS_Store

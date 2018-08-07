@@ -60,7 +60,6 @@ body {
 .shots {
   display: flex;
   flex-direction: column;
-  max-height: 350px;
   overflow: auto;
 }
 

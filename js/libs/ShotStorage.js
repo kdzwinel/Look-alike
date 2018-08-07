@@ -1,31 +1,29 @@
-"use strict";
-
+/* global _ */
 /**
  * @constructor
  */
-function ShotStorage() {
-  var _shots = [];
-  var _maxLength = 10;
+function ShotStorage() {// eslint-disable-line
+  let _shots = [];
+  const _maxLength = 10;
 
-  //load data immediately
-  chrome.storage.local.get('shots', data => {
+  // load data immediately
+  chrome.storage.local.get('shots', (data) => {
     _shots = (data && data.shots) ? data.shots : [];
   });
 
-  var save = _.throttle(() => {
-    chrome.storage.local.set({shots: _shots});
+  const save = _.throttle(() => {
+    chrome.storage.local.set({ shots: _shots });
   }, 500);
 
-  var generateId = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-      return v.toString(16);
-    });
-  };
+  const generateId = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0,// eslint-disable-line
+      v = c === 'x' ? r : (r & 0x3 | 0x8);// eslint-disable-line
+    return v.toString(16);
+  });
 
   this.add = (obj) => {
-    obj.id = generateId();
-    obj.date = Date.now();
+    obj.id = generateId();// eslint-disable-line
+    obj.date = Date.now();// eslint-disable-line
 
     _shots.unshift(obj);
     _shots.length = _maxLength;
@@ -33,21 +31,14 @@ function ShotStorage() {
     save();
   };
 
-  this.getAll = () => {
-    return _shots
-      .filter(shot => shot !== null)
-      .map(shot => {
-        //do not expose full image
-        return {
-          id: shot.id,
-          url: shot.url,
-          thumbnail: shot.thumbnail,
-          date: shot.date
-        };
-      });
-  };
+  this.getAll = () => _shots
+    .filter(shot => shot !== null)
+    .map(shot => ({
+      id: shot.id,
+      url: shot.url,
+      thumbnail: shot.thumbnail,
+      date: shot.date,
+    }));
 
-  this.getById = (id) => {
-    return _shots.find(shot => shot.id === id);
-  };
+  this.getById = id => _shots.find(shot => shot.id === id);
 }

@@ -1,41 +1,39 @@
-"use strict";
-
-var shots = new ShotStorage();
-var lastComparison = {};
+/* global ShotStorage Screenshooter */
+const shots = new ShotStorage();
+let lastComparison = {};
 
 function getCurrentTab() {
-  return new Promise(function (resolve, reject) {
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+  return new Promise(((resolve, reject) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       } else {
         resolve(tabs[0]);
       }
     });
-  });
+  }));
 }
 
 function getThumbnail(original, width, height) {
-  var canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  var image = new Image();
+  const image = new Image();
 
   return new Promise((resolve, reject) => {
     image.onload = () => {
-      var sourceWidth, sourceHeight, sourceX = 0, sourceY = 0;
+      let sourceWidth,
+        sourceHeight;
 
       if (image.width < image.height) {
         sourceWidth = image.width;
         sourceHeight = Math.round(height * (image.width / width));
-        sourceY = Math.round((image.height - sourceHeight) / 2);
       } else {
         sourceHeight = image.height;
         sourceWidth = Math.round(width * (image.height / height));
-        sourceX = Math.round((image.width - sourceWidth) / 2);
       }
 
-      canvas.getContext("2d").drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+      canvas.getContext('2d').drawImage(image, 0, 0, sourceWidth, sourceHeight, 0, 0, width, height);
 
       resolve(canvas.toDataURL());
     };
@@ -45,58 +43,54 @@ function getThumbnail(original, width, height) {
 }
 
 function validateSender(sender) {
-  //don't respond to calls from other extensions
+  // don't respond to calls from other extensions
   return sender.id !== chrome.runtime.id;
 }
 
 function handleMessage(request, sender, response) {
   if (validateSender(sender)) {
-    return;
+    return false;
   }
 
   if (request.message === 'save_shot') {
-    getCurrentTab().then((tab) => {
-      return Screenshooter.capture(tab.id).then((img) => {
-        chrome.runtime.sendMessage({
-          message: "savingShot"
-        });
-
-        getThumbnail(img, 100, 100).then((thumbnail) => {
-          shots.add({
-            url: tab.url,
-            img: img,
-            thumbnail: thumbnail
-          });
-          response();
-        });
-      });
-    }).catch((e) => {
+    getCurrentTab().then(tab => Screenshooter.capture(tab.id).then((img) => {
       chrome.runtime.sendMessage({
-        message: "error",
-        text: e ? e.message : 'Unknown error.'
+        message: 'savingShot',
+      });
+
+      getThumbnail(img, 100, 100).then((thumbnail) => {
+        shots.add({
+          url: tab.url,
+          img,
+          thumbnail,
+        });
+        response();
+      });
+    })).catch((e) => {
+      chrome.runtime.sendMessage({
+        message: 'error',
+        text: e ? e.message : 'Unknown error.',
       });
     });
   } else if (request.message === 'get_all_shots') {
     response(shots.getAll());
   } else if (request.message === 'diff') {
-    var shot = shots.getById(request.id);
-    var oldImg = shot.img;
+    const shot = shots.getById(request.id);
+    const oldImg = shot.img;
 
-    getCurrentTab().then((tab) => {
-      return Screenshooter.capture(tab.id).then((currentImg) => {
-        lastComparison = {
-          a: oldImg,
-          b: currentImg
-        };
+    getCurrentTab().then(tab => Screenshooter.capture(tab.id).then((currentImg) => {
+      lastComparison = {
+        a: oldImg,
+        b: currentImg,
+      };
 
-        chrome.tabs.create({
-          url: chrome.extension.getURL('result.html')
-        }, response);
-      });
-    }).catch((e) => {
+      chrome.tabs.create({
+        url: chrome.extension.getURL('result.html'),
+      }, response);
+    })).catch((e) => {
       chrome.runtime.sendMessage({
-        message: "error",
-        text: e ? e.message : 'Unknown error.'
+        message: 'error',
+        text: e ? e.message : 'Unknown error.',
       });
     });
   } else if (request.message === 'get_last_comparison') {
